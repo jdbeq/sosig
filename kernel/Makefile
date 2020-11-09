@@ -3,8 +3,8 @@ SRCS = $(wildcard kernel_main/*.c) \
 
 
 OBJS = $(SRCS:.c=.o)
-CFLAGS = -Wall -O2 -ffreestanding -nostdinc -nostdlib -nostartfiles
-
+INCLUDE = include/
+CFLAGS = -Wall -O2 -ffreestanding -nostdinc -nostdlib -nostartfiles -I$(INCLUDE)
 all: clean sosig.img
 
 loader/o: loader/loader.s
@@ -21,4 +21,4 @@ clean:
 	rm sosig.elf sosig.img *.o >/dev/null 2>/dev/null || true
 
 run:
-	qemu-system-aarch64 -M raspi3 -kernel sosig.img -serial null -serial stdio
+	qemu-system-aarch64 -M raspi3 -kernel sosig.img -serial null -serial stdio -d in_asm
