@@ -1,4 +1,4 @@
-extern volatile unsigned int mbox[36];
+extern volatile unsigned int mailbox[36];
 
 #define MAILBOX_REQUEST    0
 
@@ -12,7 +12,8 @@ extern volatile unsigned int mbox[36];
 #define MAILBOX_CH_COUNT   7
 #define MAILBOX_CH_PROP    8
 
-#define MAILBOX_TAG_GETSERIAL      0x10004
+/* Looking into enum in mailbox_tags.c */
+#define MAILBOX_TAG_RAM      0x00010005
 #define MAILBOX_TAG_LAST           0
 
-int MAILBOX_call(unsigned char ch);
+int mailbox_call(unsigned char ch);

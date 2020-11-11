@@ -1,5 +1,6 @@
 SRCS = $(wildcard kernel_main/*.c) \
-	$(wildcard uart/*.c)
+	$(wildcard uart/*.c) \
+	$(wildcard mailbox/*.c)
 
 OBJS = $(SRCS:.c=.o)
 INCLUDE = include/
@@ -18,7 +19,7 @@ sosig.img: loader/loader.o $(OBJS)
 
 clean:
 	rm sosig.elf sosig.img >/dev/null 2>/dev/null || true
-	rm kernel_main/*.o uart/*.o loader/*.o
+	rm kernel_main/*.o uart/*.o loader/*.o mailbox/*.o
 
 run:
-	qemu-system-aarch64 -M raspi3 -kernel sosig.img -serial null -serial stdio -d in_asm
+	qemu-system-aarch64 -M raspi3 -kernel sosig.img -serial null -serial stdio
