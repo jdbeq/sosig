@@ -1,11 +1,10 @@
 #include "uart.h"
 #include "mailbox.h"
+#include "k_print.h"
 
 void kernel_main()
 {
-    uart_puts("Initialize serial...");
-    uart_puts("\n\n");
-    
+    k_print("Initializing UART...\n");
     uart_init();
     
         // Get total amount of RAM and beginning offset
@@ -21,21 +20,21 @@ void kernel_main()
     // send the message to the GPU and receive answer
     if (mailbox_call(MAILBOX_CH_PROP)) 
     {
-        uart_puts("Memory: 0x");
+        k_print("Memory: 0x");
         uart_send_hex(mailbox[6]);
-        uart_puts("\n");
-        uart_puts("Beginning Offset: 0x");
+        k_print("\n");
+        k_print("Beginning Offset: 0x");
         uart_send_hex(mailbox[5]);
-        uart_puts("\n");        
+        k_print("\n");        
 
     } else {
-        uart_puts("Error communicating with serial!\n");
+        k_print("Error communicating with serial!\n");
     }
     
-    
+/*   
     while(1) 
     {
         uart_send_hex(uart_getc());
     }
-    
+*/
 }
