@@ -1,9 +1,27 @@
 #include "uart.h"
 #include "mailbox.h"
 #include "k_print.h"
+#include "k_string.h"
+
 
 void kernel_main()
 {
+
+    char array_one[50] = "aaa";
+    char array_two[50] = "aaaaaa";
+    
+    unsigned int x = k_strlen(array_one);
+    unsigned int y = k_strlen(array_two);
+    if (x < y)
+    {
+       k_print("ARRAY TWO IS LARGER\n");
+    }
+    if (x > y)
+    {
+       k_print("ARRAY ONE IS LARGER\n");
+    }
+
+
     k_print("Initializing UART...\n");
     uart_init();
     
