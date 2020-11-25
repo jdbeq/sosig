@@ -1,8 +1,3 @@
-
-
-/*
- Baud rate (115200 8N1) and map to GPIO
-*/
 #include "gpio.h"
 #include "uart1.h"
 
