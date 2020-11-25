@@ -1,17 +1,22 @@
-#include "uart.h"
+#include "uart1.h"
 #include "mailbox.h"
 #include "k_print.h"
-
+#include "uart0.h"
 
 
 void kernel_main()
 {
 
 
-    k_print("Initializing UART...\n");
-    uart_init();
+    k_print("Initializing UART1...\n");
+    uart1_init();
+    uart1_puts("UART0 Initialized.\n\n");
     
-        // Get total amount of RAM and beginning offset
+    k_print("Initializing UART0...\n");
+    uart0_init();
+    uart0_puts("UART0 Initialized.\n");
+    
+    // Get total amount of RAM and beginning offset
     mailbox[0] = 8*4;                     // Length. TODO: Need standard sizes
     mailbox[1] = MAILBOX_REQUEST;    
     mailbox[2] = MAILBOX_TAG_RAM;
@@ -25,10 +30,10 @@ void kernel_main()
     if (mailbox_call(MAILBOX_CH_PROP)) 
     {
         k_print("Memory: 0x");
-        uart_send_hex(mailbox[6]);
+        uart1_send_hex(mailbox[6]);
         k_print("\n");
         k_print("Beginning Offset: 0x");
-        uart_send_hex(mailbox[5]);
+        uart1_send_hex(mailbox[5]);
         k_print("\n");        
 
     } else {

@@ -24,4 +24,4 @@ clean:
 	rm kernel_main/*.o uart/*.o loader/*.o mailbox/*.o libk/*.o libk/k_string/*.o
 
 run:
-	qemu-system-aarch64 -M raspi3 -kernel sosig.img -serial null -serial stdio
+	qemu-system-aarch64 -M raspi3 -kernel sosig.img -serial stdio -serial null

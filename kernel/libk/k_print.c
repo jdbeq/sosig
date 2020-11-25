@@ -1,6 +1,6 @@
-#include "uart.h"
+#include "uart1.h"
 
 void k_print(char *s)
 {
-    uart_puts(s);
+    uart1_puts(s);
 }

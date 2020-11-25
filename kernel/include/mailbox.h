@@ -12,8 +12,11 @@ extern volatile unsigned int mailbox[36];
 #define MAILBOX_CH_COUNT   7
 #define MAILBOX_CH_PROP    8
 
-/* Looking into enum in mailbox_tags.c */
+/* Tags */
 #define MAILBOX_TAG_RAM      0x00010005
+#define MAILBOX_TAG_LAST           0
+#define MAILBOX_TAG_GETSERIAL      0x10004
+#define MAILBOX_TAG_SETCLKRATE     0x38002
 #define MAILBOX_TAG_LAST           0
 
 int mailbox_call(unsigned char ch);
