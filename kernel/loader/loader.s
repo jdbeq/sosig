@@ -3,21 +3,18 @@
 .global _start
 
 _start:
-// identify cpu and idle extra cores
+/* identify cpu and idle extra cores */
     mrs     x1, mpidr_el1
     and     x1, x1, #3
     cbz     x1, 2f
 
-// cpu id > 0, stop
-
+/* if not 0 stop */
 1:  wfe
     b       1b
 
-// If cpu id == 0 setup stack.
+/* If cpu id == 0 setup stack */
 2:  ldr     x1, =_start
     mov     sp, x1
-
-    // clear bss
     ldr     x1, =__bss_start
     ldr     w2, =__bss_size
 
@@ -26,7 +23,6 @@ _start:
     sub     w2, w2, #1
     cbnz    w2, 3b
 
-// One way call to main().
-// Stop cpu id0 too.
+/* call kernel_main() */
 4:  bl      kernel_main
     b       1b

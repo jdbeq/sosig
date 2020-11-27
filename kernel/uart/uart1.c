@@ -1,6 +1,6 @@
 #include "gpio.h"
 #include "uart1.h"
-
+#include "k_print.h"
 void uart1_init()
 {
     register unsigned int r;
@@ -39,7 +39,9 @@ void uart1_init()
     /* flush the GPIO setup */
     /* enable transmit and recieve */
     *GPPUDCLK0 = 0;             
-    *UART1_MU_CNTL = 3;          
+    *UART1_MU_CNTL = 3;
+    
+     k_print("Uart1 Initialized\n");
 }
 
 /*   send a character  */

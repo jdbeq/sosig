@@ -1,6 +1,6 @@
 #include "uart0.h"
 #include "mailbox.h"
-
+#include "k_print.h"
 
 void uart0_init()
 {
@@ -38,7 +38,8 @@ void uart0_init()
     *UART0_FBRD = 0xB;
     *UART0_LCRH = 0b11<<5; 
 	/* Enable transmit and receive, FIFO */
-    *UART0_CR = 0x301;     
+    *UART0_CR = 0x301;
+	k_print("Uart0 Initialized\n");
 }
 
 void uart0_send(unsigned int c) {
@@ -62,10 +63,9 @@ void uart0_send_hex(unsigned int d) {
 /* Receive a char */
 char uart0_getc() {
     char r;
-    /* wait until something is in the buffer */
-    do{asm volatile("nop");}while(*UART0_FR&0x10);
+     do{asm volatile("nop");}while(*UART0_FR&0x10);
     /* read and return */
-
+	r=(char)(*UART0_DR);
     /* CR = CR+LF */
     return r=='\r'?'\n':r;
 }

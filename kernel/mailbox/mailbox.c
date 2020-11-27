@@ -20,14 +20,14 @@ volatile unsigned int  __attribute__((aligned(16))) mailbox[36];
 /* 0 on failure, non-zero on success */
 int mailbox_call(unsigned char ch)
 {
-    unsigned int r = (((unsigned int)((unsigned long)&mailbox)&~0xF) | (ch&0xF));
+    unsigned int c = (((unsigned int)((unsigned long)&mailbox)&~0xF) | (ch&0xF));
 
     do {
         asm volatile("nop");
         
     } while(*MAILBOX_STATUS & MAILBOX_FULL);
         
-    *MAILBOX_WRITE = r;
+    *MAILBOX_WRITE = c;
 
     /* Wait for response */
     while(1)
@@ -39,7 +39,7 @@ int mailbox_call(unsigned char ch)
             
         } while(*MAILBOX_STATUS & MAILBOX_EMPTY);
         
-        if(r == *MAILBOX_READ)
+        if(c == *MAILBOX_READ)
         {
             return mailbox[1]==MAILBOX_RESPONSE;
         }
