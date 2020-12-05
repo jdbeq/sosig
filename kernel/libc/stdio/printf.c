@@ -1,6 +1,7 @@
+#include "stdio.h"
 #include "uart1.h"
 
-void k_print(char *s)
+void printf(char *s)
 {
     uart1_puts(s);
 }

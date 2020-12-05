@@ -1,6 +1,6 @@
-#include "k_string.h"
+#include <string.h>
 
-int k_memcmp(const void* aptr, const void* bptr, unsigned int size) {
+int memcmp(const void* aptr, const void* bptr, unsigned int size) {
 	const unsigned char* a = (const unsigned char*) aptr;
 	const unsigned char* b = (const unsigned char*) bptr;
 	for (unsigned int i = 0; i < size; i++) {

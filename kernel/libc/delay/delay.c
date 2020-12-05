@@ -1,4 +1,4 @@
-#include "k_delay.h"
+#include "delay.h"
 
 void wait_cycles(unsigned int cycles)
 {

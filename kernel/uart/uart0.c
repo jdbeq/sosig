@@ -1,6 +1,6 @@
 #include "uart0.h"
 #include "mailbox.h"
-#include "k_print.h"
+#include "stdio.h"
 
 void uart0_init()
 {
@@ -39,7 +39,7 @@ void uart0_init()
     *UART0_LCRH = 0b11<<5; 
 	/* Enable transmit and receive, FIFO */
     *UART0_CR = 0x301;
-	k_print("Uart0 Initialized\n");
+	printf("Uart0 Initialized\n");
 }
 
 void uart0_send(unsigned int c) {

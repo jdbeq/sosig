@@ -1,6 +1,6 @@
-#include "k_string.h"
+#include <string.h>
 
-void *k_memcpy(void* restrict dstptr, const void* restrict srcptr, unsigned int size) {
+void *memcpy(void* restrict dstptr, const void* restrict srcptr, unsigned int size) {
 	unsigned char* dst = (unsigned char*) dstptr;
 	const unsigned char* src = (const unsigned char*) srcptr;
 	for (unsigned int i = 0; i < size; i++)
