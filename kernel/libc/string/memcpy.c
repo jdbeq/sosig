@@ -1,3 +1,8 @@
+/*
+ * This file is subject to the terms and conditions defined in
+ * file 'LICENSE.txt', which is part of this source code package.
+ */
+
 #include <string.h>
 
 void *memcpy(void* restrict dstptr, const void* restrict srcptr, unsigned int size) {

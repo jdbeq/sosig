@@ -1,3 +1,8 @@
+/*
+ * This file is subject to the terms and conditions defined in
+ * file 'LICENSE.txt', which is part of this source code package.
+ */
+
 #include <string.h>
 
 int memcmp(const void* aptr, const void* bptr, unsigned int size) {

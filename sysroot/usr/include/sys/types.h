@@ -2,10 +2,10 @@
  * This file is subject to the terms and conditions defined in
  * file 'LICENSE.txt', which is part of this source code package.
  */
+ 
+#ifndef _SYS_TYPES_H
+#define _SYS_TYPES_H
 
-#ifndef _STDIO_H
-#define _STDIO_H 1
-
-void printf(char *s);
+typedef int pid_t;
 
 #endif

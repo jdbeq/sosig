@@ -1,5 +1,7 @@
-/* gpio.h                                                             */
-/* Memory-Mapped IO Base and offsets for all GPIO registers           */
+/*
+ * This file is subject to the terms and conditions defined in
+ * file 'LICENSE.txt', which is part of this source code package.
+ */
 
 #define MMIO_BASE       0x3F000000
  

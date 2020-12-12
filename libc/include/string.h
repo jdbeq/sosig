@@ -1,8 +1,3 @@
-/*
- * This file is subject to the terms and conditions defined in
- * file 'LICENSE.txt', which is part of this source code package.
- */
-
 #ifndef _STRING_H
 #define _STRING_H 1
  
