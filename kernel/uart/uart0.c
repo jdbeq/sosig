@@ -12,7 +12,7 @@ void uart0_init()
     register unsigned int r;
 
     /* initialize UART0 */
-    *UART0_CR = 0;         /* turn off UART0 */
+    *UART0_CR = 0;       /* turn off UART0 */
 
     /* set up clock   */
     /* set clock rate 4mhz */
@@ -32,7 +32,8 @@ void uart0_init()
     r &=~((7<<12)|(7<<15));
     r|=(4<<12)|(4<<15);    
     *GPFSEL1 = r;
-    *GPPUD = 0;            
+    *GPPUD = 0;
+    /* TODO: REPLACE THIS WITH DELAY*/             
     r=150; while(r--) { asm volatile("nop"); }
     *GPPUDCLK0 = (1<<14)|(1<<15);
     r=150; while(r--) { asm volatile("nop"); }
@@ -42,12 +43,13 @@ void uart0_init()
     *UART0_IBRD = 2;       
     *UART0_FBRD = 0xB;
     *UART0_LCRH = 0b11<<5; 
-	/* Enable transmit and receive, FIFO */
+	/*Enable transmit and receive, FIFO */
     *UART0_CR = 0x301;
 	printf("Uart0 Initialized\n");
 }
 
-void uart0_send(unsigned int c) {
+void uart0_send(unsigned int c) 
+{
     /* wait until we can send */
     do{asm volatile("nop");}while(*UART0_FR&0x20);
     /* write the character to the buffer */
@@ -55,10 +57,12 @@ void uart0_send(unsigned int c) {
 }
 
 /* Hex to binary */
-void uart0_send_hex(unsigned int d) {
+void uart0_send_hex(unsigned int d) 
+{
     unsigned int n;
     int c;
-    for(c=28;c>=0;c-=4) {
+    for(c=28;c>=0;c-=4) 
+    {
         n=(d>>c)&0xF;
         n+=n>9?0x37:0x30;
         uart0_send(n);
@@ -66,9 +70,12 @@ void uart0_send_hex(unsigned int d) {
 }
 
 /* Receive a char */
-char uart0_getc() {
+char uart0_getc() 
+{
     char r;
-     do{asm volatile("nop");}while(*UART0_FR&0x10);
+     do{asm volatile("nop");}
+		while(*UART0_FR&0x10);
+		
     /* read and return */
 	r=(char)(*UART0_DR);
     /* CR = CR+LF */
@@ -77,7 +84,8 @@ char uart0_getc() {
 
 /* Display a string */
 void uart0_puts(char *s) {
-    while(*s) {
+    while(*s) 
+    {
         if(*s=='\n')
             uart0_send('\r');
         uart0_send(*s++);
