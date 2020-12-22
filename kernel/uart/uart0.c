@@ -5,6 +5,7 @@
 
 #include "uart0.h"
 #include "mailbox.h"
+#include "delay.h"
 #include "stdio.h"
 
 void uart0_init()
@@ -33,10 +34,10 @@ void uart0_init()
     r|=(4<<12)|(4<<15);    
     *GPFSEL1 = r;
     *GPPUD = 0;
-    /* TODO: REPLACE THIS WITH DELAY*/             
-    r=150; while(r--) { asm volatile("nop"); }
+	wait_msec(200);
+	
     *GPPUDCLK0 = (1<<14)|(1<<15);
-    r=150; while(r--) { asm volatile("nop"); }
+    wait_msec(200);
     *GPPUDCLK0 = 0;        
 
     *UART0_ICR = 0x7FF;    

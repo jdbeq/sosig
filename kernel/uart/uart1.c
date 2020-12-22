@@ -5,7 +5,9 @@
 
 #include "gpio.h"
 #include "uart1.h"
+#include "delay.h"
 #include "stdio.h"
+
 void uart1_init()
 {
     register unsigned int r;
@@ -27,19 +29,11 @@ void uart1_init()
     *GPFSEL1 = r;
     *GPPUD = 0;                // enable pins 14 and 15    
 
-	/* Janky delay.  Need to be finished */
-    r = 150; 
-    while(r--) 
-    { 
-        asm volatile("nop");         
-    }
+	wait_msec(200);
     
     *GPPUDCLK0 = (1<<14) | (1<<15);
-    r=150; 
-    while(r--) 
-    { 
-        asm volatile("nop");        
-    }
+
+	wait_msec(200);
     
     /* flush the GPIO setup */
     /* enable transmit and recieve */
