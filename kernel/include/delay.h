@@ -7,5 +7,6 @@
 #define _DELAY_H 1
 
 void wait_cycles(unsigned int cycles);
+void wait_msec(unsigned int msec);
 
 #endif
