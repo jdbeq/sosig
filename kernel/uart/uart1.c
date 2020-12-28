@@ -2,83 +2,62 @@
  * This file is subject to the terms and conditions defined in
  * file 'LICENSE.txt', which is part of this source code package.
  */
-
-#include "gpio.h"
+ 
 #include "uart1.h"
-#include "delay.h"
-#include "stdio.h"
+#include "gpio.h"
+#include "system.h"
+#include "mbox.h"
 
-void uart1_init()
+static uart* uart1 = (uart*)UART_BASE;
+
+void uart1_init(int baud, int bits)
 {
-    register unsigned int r;
+    uart1->ENABLES = UART_ENA_MINIUART;
 
-    /* initialize the UART1 */
-    *UART1_ENABLE |=1;           /* enable UART1 */
-    *UART1_MU_CNTL = 0;
-    *UART1_MU_LCR = 3;           /*  2^3  */
-    *UART1_MU_MCR = 0;
-    *UART1_MU_IER = 0;
-    *UART1_MU_IIR = 0xc6;        /* disable interrupts */
-    *UART1_MU_BAUD = 270;        /* 115k baud */
-    
-    /* Map UART1 to GPIO pins */
-    r = *GPFSEL1;
-    r &=~ ((7<<12) | (7<<15)); /* gpio14, gpio15 */
-    r |= (2<<12) | (2<<15);    /* alt5 */
-    
-    *GPFSEL1 = r;
-    *GPPUD = 0;                // enable pins 14 and 15    
+    uart1->MU_IER = 0;
 
-	wait_msec(200);
-    
-    *GPPUDCLK0 = (1<<14) | (1<<15);
+    /* Enable transmitter */
+    uart1->MU_CNTL = 0;
 
-	wait_msec(200);
-    
-    /* flush the GPIO setup */
-    /* enable transmit and recieve */
-    *GPPUDCLK0 = 0;             
-    *UART1_MU_CNTL = 3;
-    
-     printf("Uart1 Initialized\n");
+    if(bits == 8)
+        uart1->MU_LCR = UART_MULCR_8BIT_MODE;
+    else
+        uart1->MU_LCR = 0;
+
+    uart1->MU_MCR = 0;
+
+    /* Disable all interrupts from MU and clear the fifos */
+    uart1->MU_IER = 0;
+
+    uart1->MU_IIR = 0xC6;
+
+    uart1->MU_BAUD = (SYSFREQ / (8 * baud)) - 1;
+
+    /* Setup GPIO 14 and 15 a alt function 5 for UART 1 TX/RX */
+    set_gpio_function(GPIO14, FS_ALT5);
+    set_gpio_function(GPIO15, FS_ALT5);
+
+    get_gpio()->GPPUD = 0;
+    for(volatile int i=0; i<150; i++) { }
+    get_gpio()->GPPUDCLK0 = (1 << 14);
+    for(volatile int i=0; i<150; i++) { }
+    get_gpio()->GPPUDCLK0 = 0;
+
+    /* Enable transmitter and receiver */
+    uart1->MU_CNTL = UART_MUCNTL_TX_ENABLE;
 }
 
-/*   send a character  */
-void uart1_send(unsigned int c) {
-    /* wait until we can send */
-    do{asm volatile("nop");}while(!(*UART1_MU_LSR&0x20));
-    /* write the character to the buffer */
-    *UART1_MU_IO=c;
+
+void uart1_write(char c)
+{
+    /* Wait until the UART has an empty space in the FIFO */
+    while((uart1->MU_LSR & UART_MULSR_TX_EMPTY) == 0) { }
+
+    /* Write the character to the FIFO for transmission */
+    uart1->MU_IO = c;
 }
 
-/* Receive a character */
-char uart1_getc() {
-    char r;
-    /* wait until something is in the buffer */
-    do{asm volatile("nop");}while(!(*UART1_MU_LSR&0x01));
-    /* read it and return */
-    r=(char)(*UART1_MU_IO);
-    /* CR to CR+LF */
-    return r=='\r'?'\n':r;
-}
-
-/* Send a string */
-
-void uart1_puts(char *s) {
-    while(*s) {
-        /* LF to CR+LF */
-        if(*s=='\n')
-            uart1_send('\r');
-        uart1_send(*s++);
-    }
-}
-
-void uart1_send_hex(unsigned int d) {
-    unsigned int n;
-    int c;
-    for(c=28;c>=0;c-=4) {
-        n=(d >> c) & 0xF;
-        n+=n>9?0x37:0x30;
-        uart1_send(n);
-    }
+uart* get_uart(void)
+{
+    return uart1;
 }
