@@ -8,6 +8,10 @@
 
 #include "gpio.h"
 
+
+/* Need to determine if it is more economical to hardcode
+ * values over shifting bits.
+ */
 #define UART_BASE    ( MMIO_BASE + 0x215000 )
 
 #define UART_ENA_MINIUART            ( 1 << 0 )
@@ -18,39 +22,39 @@
 #define UART_IRQ_SPI1                ( 1 << 1 )
 #define UART_IRQ_MU                  ( 1 << 0 )
 
-#define UART_MULCR_8BIT_MODE         ( 3 << 0 )
-#define UART_MULCR_BREAK             ( 1 << 6 )
-#define UART_MULCR_DLAB_ACCESS       ( 1 << 7 )
+#define UART_LCR_8BIT_MODE         ( 3 << 0 )
+#define UART_LCR_BREAK             ( 1 << 6 )
+#define UART_LCR_DLAB_ACCESS       ( 1 << 7 )
 
-#define UART_MUMCR_RTS               ( 1 << 1 )
+#define UART_MCR_RTS               ( 1 << 1 )
 
-#define UART_MULSR_DATA_READY        ( 1 << 0 )
-#define UART_MULSR_RX_OVERRUN        ( 1 << 1 )
-#define UART_MULSR_TX_EMPTY          ( 1 << 5 )
-#define UART_MULSR_TX_IDLE           ( 1 << 6 )
+#define UART_LSR_DATA_READY        ( 1 << 0 )
+#define UART_LSR_RX_OVERRUN        ( 1 << 1 )
+#define UART_LSR_TX_EMPTY          ( 1 << 5 )
+#define UART_LSR_TX_IDLE           ( 1 << 6 )
 
-#define UART_MUMSR_CTS               ( 1 << 5 )
+#define UART_MSR_CTS               ( 1 << 5 )
 
-#define UART_MUCNTL_RX_ENABLE        ( 1 << 0 )
-#define UART_MUCNTL_TX_ENABLE        ( 1 << 1 )
-#define UART_MUCNTL_RTS_FLOW         ( 1 << 2 )
-#define UART_MUCNTL_CTS_FLOW         ( 1 << 3 )
-#define UART_MUCNTL_RTS_FIFO         ( 3 << 4 )
-#define UART_MUCNTL_RTS_ASSERT       ( 1 << 6 )
-#define UART_MUCNTL_CTS_ASSERT       ( 1 << 7 )
+#define UART_CNTL_RX_ENABLE        ( 1 << 0 )
+#define UART_CNTL_TX_ENABLE        ( 1 << 1 )
+#define UART_CNTL_RTS_FLOW         ( 1 << 2 )
+#define UART_CNTL_CTS_FLOW         ( 1 << 3 )
+#define UART_CNTL_RTS_FIFO         ( 3 << 4 )
+#define UART_CNTL_RTS_ASSERT       ( 1 << 6 )
+#define UART_CNTL_CTS_ASSERT       ( 1 << 7 )
 
-#define UART_MUSTAT_SYMBOL_AV        ( 1 << 0 )
-#define UART_MUSTAT_SPACE_AV         ( 1 << 1 )
-#define UART_MUSTAT_RX_IDLE          ( 1 << 2 )
-#define UART_MUSTAT_TX_IDLE          ( 1 << 3 )
-#define UART_MUSTAT_RX_OVERRUN       ( 1 << 4 )
-#define UART_MUSTAT_TX_FIFO_FULL     ( 1 << 5 )
-#define UART_MUSTAT_RTS              ( 1 << 6 )
-#define UART_MUSTAT_CTS              ( 1 << 7 )
-#define UART_MUSTAT_TX_EMPTY         ( 1 << 8 )
-#define UART_MUSTAT_TX_DONE          ( 1 << 9 )
-#define UART_MUSTAT_RX_FIFO_LEVEL    ( 7 << 16 )
-#define UART_MUSTAT_TX_FIFO_LEVEL    ( 7 << 24 )
+#define UART_STAT_SYMBOL_AV        ( 1 << 0 )
+#define UART_STAT_SPACE_AV         ( 1 << 1 )
+#define UART_STAT_RX_IDLE          ( 1 << 2 )
+#define UART_STAT_TX_IDLE          ( 1 << 3 )
+#define UART_STAT_RX_OVERRUN       ( 1 << 4 )
+#define UART_STAT_TX_FIFO_FULL     ( 1 << 5 )
+#define UART_STAT_RTS              ( 1 << 6 )
+#define UART_STAT_CTS              ( 1 << 7 )
+#define UART_STAT_TX_EMPTY         ( 1 << 8 )
+#define UART_STAT_TX_DONE          ( 1 << 9 )
+#define UART_STAT_RX_FIFO_LEVEL    ( 7 << 16 )
+#define UART_STAT_TX_FIFO_LEVEL    ( 7 << 24 )
 
 
 #define UART_FSEL0(x)        ( x )

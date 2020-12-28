@@ -20,7 +20,7 @@ void uart1_init(int baud, int bits)
     uart1->MU_CNTL = 0;
 
     if(bits == 8)
-        uart1->MU_LCR = UART_MULCR_8BIT_MODE;
+        uart1->MU_LCR = UART_LCR_8BIT_MODE;
     else
         uart1->MU_LCR = 0;
 
@@ -44,14 +44,14 @@ void uart1_init(int baud, int bits)
     get_gpio()->GPPUDCLK0 = 0;
 
     /* Enable transmitter and receiver */
-    uart1->MU_CNTL = UART_MUCNTL_TX_ENABLE;
+    uart1->MU_CNTL = UART_CNTL_TX_ENABLE;
 }
 
 
 void uart1_write(char c)
 {
     /* Wait until the UART has an empty space in the FIFO */
-    while((uart1->MU_LSR & UART_MULSR_TX_EMPTY) == 0) { }
+    while((uart1->MU_LSR & UART_LSR_TX_EMPTY) == 0) { }
 
     /* WRITE the character to the FIFO for transmission */
     uart1->MU_IO = c;

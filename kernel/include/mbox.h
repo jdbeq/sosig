@@ -27,8 +27,7 @@ typedef struct {
     volatile unsigned int WRITE;
     } mbox;
 
-enum mbox_status_reg_bits 
-{
+enum mbox_status_reg_bits {
     MB_STATUS_FULL  = 0x80000000,
     MB_STATUS_EMPTY = 0x40000000,
     MB_STATUS_LEVEL = 0x400000FF,
