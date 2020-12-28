@@ -10,17 +10,17 @@ void dump_registers(unsigned long esr, unsigned long elr, unsigned long spsr, un
 {   
     /* Dump the Registers */
     printf(":\n  ESR_EL1 ");
-    uart1_send_hex(esr>>32);
-    uart1_send_hex(esr);
+    printf("%x", (esr>>32));
+    printf("%x", (esr));
     printf(" ELR_EL1 ");
-    uart1_send_hex(elr>>32);
-    uart1_send_hex(elr);
+    printf("%x", (elr>>32));
+    printf("%x", (elr));
     printf("\n SPSR_EL1 ");
-    uart1_send_hex(spsr>>32);
-    uart1_send_hex(spsr);
+    printf("%x", (spsr>>32));
+    printf("%x", (spsr));
     printf(" FAR_EL1 ");
-    uart1_send_hex(far>>32);
-    uart1_send_hex(far);
+    printf("%x", (far>>32));
+    printf("%x", (far));
     printf("\n");
 }
 

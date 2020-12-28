@@ -1,8 +1,10 @@
 SRCS = $(wildcard kernel_main/*.c) \
+	$(wildcard gpio/*.c) \
 	$(wildcard uart/*.c) \
 	$(wildcard mailbox/*.c) \
 	$(wildcard libc/stdio/*.c) \
 	$(wildcard libc/string/*.c) \
+	$(wildcard libc/stdlib/*.c) \
 	$(wildcard framebuffer/*.c) \
 	$(wildcard libc/delay/*.c)
 
@@ -23,7 +25,7 @@ sosig.img: loader/loader.o $(OBJS)
 
 clean:
 	rm sosig.elf sosig.img >/dev/null 2>/dev/null || true
-	rm kernel_main/*.o uart/*.o loader/*.o mailbox/*.o libc/stdio/*.o libc/string/*.o libc/delay/*.o
+	rm kernel_main/*.o uart/*.o loader/*.o mailbox/*.o libc/stdio/*.o libc/string/*.o libc/delay/*.o gpio/*.o
 
 run:
-	qemu-system-aarch64 -M raspi3 -kernel sosig.img -serial stdio -serial null -d int
+	qemu-system-aarch64 -M raspi3 -kernel sosig.img -serial null -serial stdio -d int

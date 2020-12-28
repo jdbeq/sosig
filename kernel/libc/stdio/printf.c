@@ -4,8 +4,9 @@
  */
 #include "stdio.h"
 #include "stdarg.h"
+#include "uart1.h"
 
-extern volatile unsigned char _end;
+volatile unsigned char _end;
 
 unsigned int vsprintf(char *dest, char *format, va_list args)
 {
@@ -17,82 +18,97 @@ unsigned int vsprintf(char *dest, char *format, va_list args)
     char *orig = dest;
     char tmpstr[19];
 
-    if(dest==(void*)0 || format==(void*)0) {
+    if(dest==(void*)0 || format==(void*)0) 
+    {
         return 0;
     }
 
     arg = 0;
-    while(*format) {
-        // argument access
-        if(*format=='%') {
+    while(*format) 
+    {
+        if(*format=='%') 
+        {
             format++;
-            // literal %
-            if(*format=='%') {
+            if(*format=='%') 
+            {
                 goto put;
             }
+            
             len=0;
-            // size modifier
-            while(*format>='0' && *format<='9') {
+            
+            while(*format>='0' && *format<='9') 
+            {
                 len *= 10;
                 len += *format-'0';
                 format++;
             }
-            // skip long modifier
-            if(*format=='l') {
+            
+            /* long not supported */
+            if(*format=='l') 
+            {
                 format++;
             }
-            // character
-            if(*format=='c') {
+            
+            if(*format=='c') 
+            {
                 arg = va_arg(args, int);
                 *dest++ = (char)arg;
                 format++;
                 continue;
             } else
-            // decimal number
-            if(*format=='d') {
+            
+            
+            if(*format=='d') 
+            {
                 arg = va_arg(args, int);
-                // check input
                 sign=0;
                 if((int)arg<0) {
                     arg*=-1;
                     sign++;
                 }
-                if(arg>99999999999999999L) {
+                if(arg>99999999999999999L) 
+                {
                     arg=99999999999999999L;
                 }
-                // convert to string
+
                 i=18;
                 tmpstr[i]=0;
-                do {
+                do 
+                {
                     tmpstr[--i]='0'+(arg%10);
                     arg/=10;
                 } while(arg!=0 && i>0);
-                if(sign) {
+                
+                if(sign) 
+                {
                     tmpstr[--i]='-';
                 }
-                // padding, only space
-                if(len>0 && len<18) {
-                    while(i>18-len) {
+                
+                if(len>0 && len<18) 
+                {
+                    while(i>18-len) 
+                    {
                         tmpstr[--i]=' ';
                     }
                 }
                 p=&tmpstr[i];
                 goto copystring;
             } else
-            // hex number
-            if(*format=='x') {
+            
+            if(*format=='x') 
+            {
                 arg = va_arg(args, long int);
-                // convert to string
                 i=16;
                 tmpstr[i]=0;
-                do {
+                do 
+                {
                     char n=arg & 0xf;
-                    // 0-9 => '0'-'9', 10-15 => 'A'-'F'
                     tmpstr[--i]=n+(n>9?0x37:0x30);
                     arg>>=4;
                 } while(arg!=0 && i>0);
-                // padding, only leading zeros
-                if(len>0 && len<=16) {
+                
+                if(len>0 && len<=16) 
+                {
                     while(i>16-len) {
                         tmpstr[--i]='0';
                     }
@@ -100,10 +116,13 @@ unsigned int vsprintf(char *dest, char *format, va_list args)
                 p=&tmpstr[i];
                 goto copystring;
             } else
-            // string
-            if(*format=='s') {
+            
+            if(*format=='s') 
+            {
                 p = va_arg(args, char*);
-copystring:     if(p==(void*)0) {
+
+copystring:		if(p==(void*)0) {
+					printf("NULL STRING");
                     p="(null)";
                 }
                 while(*p) {
@@ -116,13 +135,10 @@ put:        *dest++ = *format;
         format++;
     }
     *dest=0;
-    // number of bytes written
     return dest-orig;
 }
 
-/*
- * Variable length arguments
- */
+/* Variable length arguments */
 unsigned int sprintf(char *dst, char* fmt, ...)
 {
     va_list args;
@@ -139,12 +155,11 @@ void printf(char *fmt, ...)
     char *s = (char*)&_end;
     /* Use vsprintf to format our string */
     vsprintf(s,fmt,args);
-    // print out as usual
     while(*s) {
-        /* convert newline to carrige return + newline */
+        /* Convert newline to carrige return + newline */
         if(*s=='\n')
-            uart0_send('\r');
-        uart0_send(*s++);
+            uart1_write('\r');
+        uart1_write(*s++);
     }
 }
 
