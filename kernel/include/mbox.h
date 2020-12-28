@@ -20,11 +20,11 @@ typedef enum
 typedef struct {
     volatile unsigned int READ_MBOX;
     volatile unsigned int reserved1[((0x90 - 0x80) / 4) - 1];
-    volatile unsigned int Poll;
-    volatile unsigned int Sender;
-    volatile unsigned int Status;
-    volatile unsigned int Configuration;
-    volatile unsigned int Write;
+    volatile unsigned int POLL_MBOX;
+    volatile unsigned int SENDER;
+    volatile unsigned int STATUS;
+    volatile unsigned int CONFIG;
+    volatile unsigned int WRITE;
     } mbox;
 
 enum mbox_status_reg_bits 

@@ -20,8 +20,8 @@ void mbox0_write(mbox0_channel channel, int value)
 
     /* Wait until the mbox becomes available and then write to the mbox
        channel */
-    while((mbox0->Status & MB_STATUS_FULL) != 0) { }
-    mbox0->Write = value;
+    while((mbox0->STATUS & MB_STATUS_FULL) != 0) { }
+    mbox0->WRITE = value;
 }
 
 
@@ -31,7 +31,7 @@ int mbox0_read(mbox0_channel channel)
     /* Keep reading the register until the proper channel returns. */
     while((value & 0xF) != channel)
     {
-		while(mbox0->Status & MB_STATUS_EMPTY) { }
+		while(mbox0->STATUS & MB_STATUS_EMPTY) { }
         value = mbox0->READ_MBOX;
     }
 

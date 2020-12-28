@@ -53,7 +53,7 @@ void uart1_write(char c)
     /* Wait until the UART has an empty space in the FIFO */
     while((uart1->MU_LSR & UART_MULSR_TX_EMPTY) == 0) { }
 
-    /* Write the character to the FIFO for transmission */
+    /* WRITE the character to the FIFO for transmission */
     uart1->MU_IO = c;
 }
 
