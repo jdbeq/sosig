@@ -55,9 +55,8 @@ void property_add_tag(mb_tag tag, ...)
 
         case TAG_GET_CLOCKS:
         case TAG_GET_COMMAND_LINE:
-            /* Provide a 256-byte buffer */
             property_tag[tag_index++] = 256;
-            property_tag[tag_index++] = 0; /* Request */
+            property_tag[tag_index++] = 0;
             tag_index += 256 >> 2;
             break;
 
@@ -88,8 +87,7 @@ void property_add_tag(mb_tag tag, ...)
         case TAG_GET_VIRTUAL_OFFSET:
         case TAG_SET_VIRTUAL_OFFSET:
             property_tag[tag_index++] = 8;
-            property_tag[tag_index++] = 0; /* Request */
-
+            property_tag[tag_index++] = 0; 
             if((tag == TAG_SET_PHYSICAL_SIZE) ||
                 (tag == TAG_SET_VIRTUAL_SIZE) ||
                 (tag == TAG_SET_VIRTUAL_OFFSET) ||
@@ -113,8 +111,7 @@ void property_add_tag(mb_tag tag, ...)
         case TAG_SET_PIXEL_ORDER:
         case TAG_GET_PITCH:
             property_tag[tag_index++] = 4;
-            property_tag[tag_index++] = 0; /* Request */
-
+            property_tag[tag_index++] = 0;
             if((tag == TAG_SET_DEPTH) ||
                 (tag == TAG_SET_PIXEL_ORDER) ||
                 (tag == TAG_SET_ALPHA_MODE))
@@ -131,7 +128,7 @@ void property_add_tag(mb_tag tag, ...)
         case TAG_GET_OVERSCAN:
         case TAG_SET_OVERSCAN:
             property_tag[tag_index++] = 16;
-            property_tag[tag_index++] = 0; /* Request */
+            property_tag[tag_index++] = 0;
 
             if((tag == TAG_SET_OVERSCAN))
             {

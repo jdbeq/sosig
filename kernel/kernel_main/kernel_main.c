@@ -16,11 +16,12 @@ void kernel_main(void)
 	mbox_property_t *prop;
 	uint32_t bus_frequency;
 	int32_t cpu_frequency= prop->data.buffer_32[1];
+	/* Initialize uart1 for I/O */
 	uart1_init(115200, 8);
 
 	/* Initialize mailbox tags */
 	property_init();
-	/* Initialize uart1 for I/O */
+	/* Add appropriate tags */
 	property_add_tag(TAG_GET_CLOCK_RATE, TAG_CLOCK_CORE);		
 	/* Bus Prephrial clock rate */
 	prop = get_property(TAG_GET_CLOCK_RATE);
